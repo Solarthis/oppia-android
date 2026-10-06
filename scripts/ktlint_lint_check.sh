@@ -1,14 +1,16 @@
 #!/bin/bash
 
-source scripts/formatting.sh
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd) || exit 1
+cd "$ROOT" || exit 1
+source scripts/formatting.sh || exit 1
 
 echo "********************************"
 echo "Checking code formatting"
 echo "********************************"
 
-github_actions_path=$1
+github_actions_path=${1:-}
 
-jar_file_path=$?
+jar_file_path=""
 
 if [ $# -eq 0 ]; then
     jar_file_path="../oppia-android-tools/ktlint"
@@ -16,7 +18,7 @@ else
     jar_file_path="$github_actions_path/oppia-android-tools/ktlint"
 fi
 
-java -jar $jar_file_path --android app/src/**/*.kt data/src/**/*.kt domain/src/**/*.kt testing/src/**/*.kt utility/src/**/*.kt scripts/src/**/*.kt instrumentation/src/**/*.kt
+java -jar "$jar_file_path" --android app/src/**/*.kt data/src/**/*.kt domain/src/**/*.kt testing/src/**/*.kt utility/src/**/*.kt scripts/src/**/*.kt instrumentation/src/**/*.kt
 
 status=$?
 
